@@ -21,7 +21,7 @@ export async function getUser(req, res) {
 
 export async function registerUser(req, res) {
     try {
-        const { fname, lname, phone, password } = req.body
+        const { fname, lname, phone, password, role } = req.body
 
         // Check if phone number is unique
         const existingPhone = await User.findOne({ phone })
@@ -32,6 +32,23 @@ export async function registerUser(req, res) {
         // Check password validity
         if (!password || password.length < 6) {
             return res.json({ error: "Password must be greater than 6 characters" })
+        }
+
+        // Admin creation
+        if (role == "admin") {
+            // Hash password
+            const hashedPassword = await hashPassword(password)
+
+            const user = await User.create({
+                fname,
+                lname,
+                phone,
+                password: hashedPassword,
+                isVerified: true,
+                role
+            })
+
+            return res.json(user)
         }
 
         // Hash password

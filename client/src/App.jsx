@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard"
 import AuthContextProvider from "./context/AuthContext"
 import ProtectedRoutes from "./components/ProtectedRoutes"
 import DriverTrackingPage from "./pages/DriverTrackingPage"
+import AdminDashboard from "./pages/Admin/AdminDashboard"
 
 // Set axios defaults
 const BASE_URL = "http://localhost:8000/"
@@ -22,6 +23,10 @@ function App() {
           <Route element={<ProtectedRoutes />}>
             <Route index element={<Dashboard />} />
             <Route path="map" element={<DriverTrackingPage />} />
+          </Route>
+
+          <Route path="/admin">
+            <Route index element={<AdminDashboard />} />
           </Route>
   
           <Route path="login" element={<Login />} />

@@ -3,7 +3,7 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 
 import authRoutes from './routes/authRoutes.js'
-import vehicleRoutes from './routes/vehicleRoutes.js'
+import busRoutes from './routes/busRoutes.js'
 import { connectDB } from "./config/db.js"
 
 import dotenv from "dotenv"
@@ -28,7 +28,8 @@ app.get('/', (req, res) => {
 })
 
 app.use('/auth', authRoutes)
-app.use('/vehicles', vehicleRoutes)
+// app.use('/vehicles', vehicleRoutes)
+app.use('/buses', busRoutes)
 
 const PORT = 8000
 
