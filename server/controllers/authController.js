@@ -21,7 +21,8 @@ export async function getUser(req, res) {
 
 export async function registerUser(req, res) {
     try {
-        const { fname, lname, phone, password, role } = req.body
+        var { password } = req.body
+        const { fname, lname, phone, role } = req.body
 
         // Check if phone number is unique
         const existingPhone = await User.findOne({ phone })
@@ -29,15 +30,20 @@ export async function registerUser(req, res) {
             return res.json({ error: "Phone number already exists in the database" })
         } 
 
+        if (role == "driver") {
+            password = `${fname}@123`
+        }
+
         // Check password validity
         if (!password || password.length < 6) {
             return res.json({ error: "Password must be greater than 6 characters" })
         }
 
+        // Hash password
+        const hashedPassword = await hashPassword(password)
+
         // Admin creation
-        if (role == "admin") {
-            // Hash password
-            const hashedPassword = await hashPassword(password)
+        if (role == "admin" || role == "driver") {
 
             const user = await User.create({
                 fname,
@@ -49,19 +55,18 @@ export async function registerUser(req, res) {
             })
 
             return res.json(user)
+
+        } else {
+
+            const user = await User.create({
+                fname,
+                lname,
+                phone,
+                password: hashedPassword
+            })
+
+            return res.json(user)
         }
-
-        // Hash password
-        const hashedPassword = await hashPassword(password)
-
-        const user = await User.create({
-            fname,
-            lname,
-            phone,
-            password: hashedPassword
-        })
-
-        res.json(user)
     } catch (error) {
         console.error(error)
     }
@@ -109,6 +114,16 @@ export async function logoutUser(req, res) {
         res.clearCookie('token', {
             httpOnly:true
         }).json({ message: "Logged out successfully!" })
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+export async function getAllDrivers(req, res) {
+    try {
+        const drivers = await User.find({ role: "driver" })
+
+        res.json(drivers)
     } catch (error) {
         console.error(error)
     }
