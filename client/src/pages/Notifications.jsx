@@ -40,6 +40,12 @@ function Notifications() {
             <h1>NOTIFICATIONS</h1>
 
             {
+                notifications.length == 0 && (
+                    <p>No notifications available for now. Try to reload the page.</p>
+                )
+            }
+
+            {
                 notifications.map(notification => (
                     <div key={notification._id}>
                         <p>{ notification.message }</p>
