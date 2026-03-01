@@ -98,7 +98,7 @@ function Login() {
             {/* Image */}
             <img
                 src={vector}
-                className="h-120"
+                className="h-120 grayscale"
             />
         </div>
     </div>

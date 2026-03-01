@@ -62,7 +62,7 @@ function Signup() {
             {/* Image */}
             <img
                 src={vector}
-                className="h-120"
+                className="h-120 grayscale"
             />
 
             <div className="p-8">
