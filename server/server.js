@@ -10,35 +10,43 @@ import notificationRoutes from './routes/notificationRoutes.js'
 
 import { connectDB } from "./config/db.js"
 
+import path from "path"
+
 import dotenv from "dotenv"
 
 dotenv.config()
 
 const app = express()
-
-app.use(cors({
-    origin: "http://localhost:5173",
-    credentials: true
-}))
+const __dirname = path.resolve()
 
 // Middleware
+if (process.env.NODE_ENV !== "production") {
+    app.use(cors({
+        origin: "http://localhost:5173",
+        credentials: true
+    }))
+
+}
+
 app.use(express.json())
 app.use(cookieParser())
 app.use(express.urlencoded({ extended: false }))
 
+app.use('/api/auth', authRoutes)
+app.use('/api/routes', routeRoutes)
+app.use('/api/buses', busRoutes)
+app.use('/api/trips', tripRoutes)
+app.use('/api/notifications', notificationRoutes)
 
-app.get('/', (req, res) => {
-    res.send("Hello World!")
-})
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../client/dist")))
 
-app.use('/auth', authRoutes)
-app.use('/routes', routeRoutes)
-app.use('/buses', busRoutes)
-app.use('/trips', tripRoutes)
-app.use('/notifications', notificationRoutes)
+    app.get((req, res) => {
+        res.sendFile(path.join(__dirname, "../client", "dist", "index.html"))
+    })
+}
 
-const PORT = 8000
-
+const PORT = process.env.PORT || 8000
 connectDB().then(() => {
     app.listen(PORT, () => {
         console.log(`Listening on port ${PORT}`)

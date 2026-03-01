@@ -31,7 +31,7 @@ function DriverTrackingPage() {
 
     const markRouteAsComplete = async () => {
         try {
-            const {data} = await axios.post('/routes/complete', {
+            const {data} = await axios.post('routes/complete', {
                 routeId: id
             })
 
@@ -50,7 +50,7 @@ function DriverTrackingPage() {
         const fetchRoute = async () => {
             try {
                 setLoading(true)
-                const {data} = await axios.get(`/routes/${id}`)
+                const {data} = await axios.get(`routes/${id}`)
                 setRoute(data)
             } catch (error) {
                 console.error(error)

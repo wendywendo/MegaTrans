@@ -23,7 +23,7 @@ function AdminDashboard() {
     e.preventDefault()
 
     try {
-      const {data} = await axios.post('/routes/create',
+      const {data} = await axios.post('routes/create',
         {
           bus: routeData.bus,
           driver: routeData.driver,
@@ -59,7 +59,7 @@ function AdminDashboard() {
   useEffect(() => {
     const fetchActiveRoutes = async () => {
         try {
-          const {data} = await axios.get('/routes/active/')
+          const {data} = await axios.get('routes/active/')
 
           if (data.error) {
             return alert(data.error)
@@ -88,7 +88,7 @@ function AdminDashboard() {
     console.log("Adding driver...")
 
     try {
-      const { data } = await axios.post('/auth/register/', {
+      const { data } = await axios.post('auth/register/', {
           fname,
           lname,
           phone,
@@ -110,7 +110,7 @@ function AdminDashboard() {
   useEffect(() => {
     const fetchDrivers = async () => {
       try {
-        const { data } = await axios.get('/auth/drivers/')
+        const { data } = await axios.get('auth/drivers/')
 
         setDrivers(data)
       } catch (error) {
@@ -129,7 +129,7 @@ function AdminDashboard() {
   // Create bus
   const createBus = async () => {
     try {
-      const { data } = await axios.post('/buses/', {
+      const { data } = await axios.post('buses/', {
         name: bus
       })
 
@@ -147,7 +147,7 @@ function AdminDashboard() {
   const deleteBus = async (bus) => {
     if (window.confirm("Are you sure?")) {
       try {
-        const { data } = await axios.delete(`/buses/${bus._id}`)
+        const { data } = await axios.delete(`buses/${bus._id}`)
 
         if (data.error) {
           return alert("Unexpected error occured!")
@@ -165,7 +165,7 @@ function AdminDashboard() {
   useEffect(() => {
     const getAllBuses = async () => {
       try {
-        const { data } = await axios.get('/buses/')
+        const { data } = await axios.get('buses/')
 
         setBuses(data)
       } catch (error) {

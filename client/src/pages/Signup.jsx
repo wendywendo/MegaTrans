@@ -28,7 +28,7 @@ function Signup() {
                 return setError("Password does not match confirm password")
             }
 
-            const { data } = await axios.post('/auth/register/', {
+            const { data } = await axios.post('auth/register/', {
                 fname,
                 lname,
                 phone,

@@ -8,7 +8,7 @@ function AdminSidebar({ route, setRoute }) {
     useEffect(() => {
         const fetchActiveRoutes = async () => {
             try {
-                const { data } = await axios.get('/routes/active')
+                const { data } = await axios.get('routes/active')
 
                 setActiveRoutes(data)
 

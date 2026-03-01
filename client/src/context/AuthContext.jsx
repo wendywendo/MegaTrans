@@ -12,7 +12,7 @@ export default function AuthContextProvider({ children }) {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const { data } = await axios.get('/auth/');
+                const { data } = await axios.get('auth/');
 
                 if (!data?.error) {
                     setUser(data);

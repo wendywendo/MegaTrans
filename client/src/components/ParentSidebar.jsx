@@ -7,7 +7,7 @@ function ParentSidebar({ route, setRoute }) {
 
     useEffect(() => {
         const fetchTrips = async () => {
-            const { data } = await axios.get('/trips/parent')
+            const { data } = await axios.get('trips/parent')
 
             setBookedTrips(data)
         }

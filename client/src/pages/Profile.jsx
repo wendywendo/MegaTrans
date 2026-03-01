@@ -10,7 +10,7 @@ function Profile() {
 
     const logoutUser = async () => {
         try {
-        const { data } = await axios.post('/auth/logout/')
+        const { data } = await axios.post('auth/logout/')
 
         if (data.message) {
             alert("Logged out successfully")

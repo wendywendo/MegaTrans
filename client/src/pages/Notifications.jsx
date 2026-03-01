@@ -7,7 +7,7 @@ function Notifications() {
 
     const markNotificationAsRead = async (notificationId) => {
         try {
-            const { data } = await axios.put(`/notifications/${notificationId}`)
+            const { data } = await axios.put(`notifications/${notificationId}`)
 
             if (!data.error) {
                 // Update UI
@@ -21,7 +21,7 @@ function Notifications() {
     useEffect(() => {
         const fetchAllNotifications = async () => {
             try {
-                const { data } = await axios.get('/notifications')
+                const { data } = await axios.get('notifications')
 
                 if (!data?.error) {
                     setNotifications(data)

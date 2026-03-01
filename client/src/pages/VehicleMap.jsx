@@ -59,7 +59,7 @@ function VehicleMap({ start, end, route, mode, visualizing }) {
 
                     // Update backend
                     try {
-                        const {data} = await axios.post(`/routes/update-location`, {
+                        const {data} = await axios.post(`routes/update-location`, {
                             routeId: route._id,
                             latitude,
                             longitude
@@ -98,7 +98,7 @@ function VehicleMap({ start, end, route, mode, visualizing }) {
 
                 // Update backend so parents/admins see movement
                 try {
-                    await axios.post('/routes/update-location', {
+                    await axios.post('routes/update-location', {
                         routeId: route._id,
                         latitude: lat, 
                         longitude: lng
@@ -123,7 +123,7 @@ function VehicleMap({ start, end, route, mode, visualizing }) {
 
         const interval = setInterval(async () => {
             try {
-                const { data } = await axios.get(`/routes/${route._id}/location`)
+                const { data } = await axios.get(`routes/${route._id}/location`)
 
                 if (data?.latitude && data?.longitude) {
                     setBusPos([data.latitude, data.longitude])

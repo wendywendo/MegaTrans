@@ -20,7 +20,7 @@ function Login() {
         setLoading(true)
 
         try {
-            const { data } = await axios.post('/auth/login/', {
+            const { data } = await axios.post('auth/login/', {
                 phone,
                 password
             })

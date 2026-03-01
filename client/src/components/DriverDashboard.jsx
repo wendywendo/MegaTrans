@@ -8,7 +8,7 @@ function DriverDashboard() {
 
     useEffect(() => {
         const fetchRoutes = async () => {
-            const { data } = await axios.get('/routes/driver/')
+            const { data } = await axios.get('routes/driver/')
 
             setRoutes(data)
         }

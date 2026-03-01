@@ -11,7 +11,7 @@ function StudentChecklist() {
 
     const updateBookedTrip = async (tripId, status) => {
         try {
-            const {data} = await axios.put(`/trips/${tripId}`, {
+            const {data} = await axios.put(`trips/${tripId}`, {
                 status
             })
 
@@ -27,7 +27,7 @@ function StudentChecklist() {
 
     const startRoute = async () => {
         try {
-            const { data } = await axios.post(`/routes/start`, {
+            const { data } = await axios.post(`routes/start`, {
                 routeId: id
             })
 
@@ -41,7 +41,7 @@ function StudentChecklist() {
 
     useEffect(() => {
         const fetchPassengers = async () => {
-            const {data} = await axios.get(`/trips/${id}/`)
+            const {data} = await axios.get(`trips/${id}/`)
             setBookedTrips(data)
         }
 
