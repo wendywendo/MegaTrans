@@ -10,7 +10,6 @@ import DriverTrackingPage from "./pages/DriverTrackingPage"
 import AdminDashboard from "./pages/Admin/AdminDashboard"
 import DriverDashboard from "./pages/Driver/DriverDashboard"
 import StudentChecklist from "./pages/Driver/StudentChecklist"
-import ParentMap from "./pages/ParentMap"
 import PageNotFound from "./pages/PageNotFound"
 
 // Set axios defaults
@@ -27,8 +26,7 @@ function App() {
           <Route element={<ProtectedRoutes />}>
             <Route index element={<Dashboard />} />
             <Route path="map">
-              <Route path="parent" element={<ParentMap />} />
-              <Route path=":id" element={<DriverTrackingPage />} />
+              <Route path=":id?" element={<DriverTrackingPage />} />
             </Route>
           </Route>
 

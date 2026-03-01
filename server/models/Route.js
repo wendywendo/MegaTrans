@@ -29,7 +29,7 @@ const RouteSchema = new mongoose.Schema({
         },
         coordinates: { 
             type: [Number], 
-            required: true 
+            required: true  // lng, lat
         }
     },
     deptTime: String,

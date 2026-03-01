@@ -4,65 +4,109 @@ import axios from "axios"
 import VehicleMap from './VehicleMap'
 import { useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import ParentSidebar from '../components/ParentSidebar';
 
 function DriverTrackingPage() {
-
     const { id } = useParams()
-
     const { user } = useAuth()
+
+    const [loading, setLoading] = useState(false)
  
     const coordinatesMap = {
-        NA: [-1.2921, 36.8219],     // Nairobi
-        KS: [-0.0917, 34.767956],  // Kisumu
+        NA: [-1.2921, 36.8219], // Nairobi
+        KS: [-0.0917, 34.767956], // Kisumu
         MOM: [-4.043740, 39.658871] // Mombasa
     };
 
     const [route, setRoute] = useState({})
 
+    const isDriver = user?.role === "driver"
+    const isParent = user?.role === "parent"
+    const isAdmin = user?.role === "admin"
+
     // Fetch route
     useEffect(() => {
+        if (!id) return;
+
         const fetchRoute = async () => {
             try {
+                setLoading(true)
                 const {data} = await axios.get(`/routes/${id}`)
-                
                 setRoute(data)
             } catch (error) {
                 console.error(error)
+            } finally {
+                setLoading(false)
             }
         }
 
         fetchRoute()
-    }, [])
+    }, [id])
 
-    if (!route.from || !route.to) {
+    if (loading) {
         return <div>Loading route...</div>
     }
 
-    const start = coordinatesMap[route.from];
-    const end = coordinatesMap[route.to];
+    const start = route.from ? coordinatesMap[route.from] : null;
+    const end = route.to ? coordinatesMap[route.to] : null;
+
 
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 5fr" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "1fr 4fr" }}>
         <div>
-            <p>User role: { user.role }</p>
+            <p>Role: { user.role }</p>
 
-            <br></br>
+            <br />
 
-            <p><b>Bus {route.bus.name}</b></p>
-            <p>From: { route.from }</p>
-            <p>To: { route.to }</p>
-            <p>Dept Time: { route.deptTime }</p>
-            <p>ETA: { route.eta }</p>
+            {
+                isParent && (
+                    <ParentSidebar 
+                        route={route}
+                        setRoute={setRoute}
+                    />
+                )
+            }
+
+            {
+                (!loading && isDriver) && (
+                    <>
+                        <p><b>Bus {route.bus?.name}</b></p>
+                        <p>From: { route.from }</p>
+                        <p>To: { route.to }</p>
+                        <p>Dept Time: { route.deptTime }</p>
+                        <p>ETA: { route.eta }</p>
+                    </>
+                )
+            }
+
             
-            <br></br>
-            <button>MARK TRIP AS COMPLETE</button>
+            <br />
+
+            {
+                isDriver && (
+                    <button>
+                        MARK TRIP AS COMPLETE
+                    </button>
+                )
+            }
         </div>
 
-        <VehicleMap 
-            start={start}
-            end={end}
-            route={route}
-        />
+
+        <div>
+            {
+                route?.from ? (
+                    <VehicleMap 
+                        start={start}
+                        end={end}
+                        route={route}
+                        mode={isDriver ? "driver" : "viewer"}
+                    />
+                ) : (
+                    <p>No route selected!</p>
+                )
+            }
+        </div>
+    
     </div>
   )
 }

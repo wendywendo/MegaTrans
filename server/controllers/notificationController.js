@@ -1,8 +1,17 @@
-import Notification from "../models/Notification"
+import Notification from "../models/Notification.js"
 
 export async function getAllNotifications(req, res) {
     try {
-        const notifications = await Notification.find({})
+        const { token } = req.cookies
+        
+        if (!token) {
+            return res.json({ error: "Unauthorized" })
+        }
+
+        const decoded = jwt.verify(token, process.env.SECRET_KEY)
+
+        // Find notifications sent to me and read = false
+        const notifications = await Notification.find({ to: decoded.id, read: false })
 
         res.json(notifications)
     } catch (error) {

@@ -84,11 +84,37 @@ export async function updateBookedTrip(req, res) {
       id,
       { status },
       { new: true, runValidators: true }
-    );
+    )
+        .populate("user")
+        .populate("route")
 
     if (!trip) {
       return res.json({ error: "Booked trip does not exist" });
     }
+
+    // ===========
+
+    // Send notifications to parents that students have boarded and are en-route
+    if (status == "boarded") {
+        const message = `Your booked trip from ${trip.route.from} -> ${trip.route.to} scheduled to depart at ${trip.route.deptTime} has been boarded`;
+
+        await Notification.create({
+            message,
+            to: trip.user
+        })
+    }
+
+    // Send notifications to parents that students have arrived
+    if (status == "arrived") {
+        const message = `Your booked trip from ${trip.route.from} -> ${trip.route.to} scheduled to arrive at ${trip.route.eta} has arrived!`;
+
+        await Notification.create({
+            message,
+            to: trip.user
+        })
+    }
+
+    // ===============
 
     res.json(trip);
   } catch (error) {
