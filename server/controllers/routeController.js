@@ -30,6 +30,18 @@ export async function getActiveRoutes(req, res) {
     }
 }
 
+export async function getUpcomingRoutes(req, res) {
+    try {
+        const routes = await Route.find({ status: "upcoming" })
+            .populate("bus")
+            .populate("driver", "fname lname")
+        res.json(routes)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: "Server error" })
+    }
+}
+
 export async function getRoute(req, res) {
     try {
         const { id } = req.params;

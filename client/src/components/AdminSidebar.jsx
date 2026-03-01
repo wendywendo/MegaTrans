@@ -37,9 +37,13 @@ function AdminSidebar({ route, setRoute }) {
                         <p>{ ind+1 }. { activeRoute.bus.name }</p>
                         <p>Status: { activeRoute.status }</p>
 
-                        <button onClick={() => {
-                            setRoute(activeRoute)
-                        }}>VIEW</button>
+                        {
+                            activeRoute.status == "active" && (
+                                <button onClick={() => {
+                                    setRoute(activeRoute)
+                                }}>VIEW</button>
+                            )
+                        }   
 
                         <br></br>
                     </div>

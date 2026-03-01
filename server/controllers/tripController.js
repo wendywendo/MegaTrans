@@ -24,7 +24,13 @@ export async function bookTrip(req, res) {
             route
         })
 
-        res.json(bookedTrip)
+        const populatedBookedTrip = await BookedTrip.findById(bookedTrip._id)
+            .populate({
+                path: "route",
+                populate: { path: "bus" }
+            });
+
+        res.json(populatedBookedTrip)
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: "Server error" })

@@ -5,6 +5,9 @@ import { Link } from "react-router-dom"
 function AdminDashboard() {
 
   // ================= ROUTES =========================
+
+  const today = new Date().toISOString().split("T")[0] // YYYY-MM-DD
+
   const [routes, setRoutes] = useState([])
 
   const [routeData, setRouteData] = useState({
@@ -23,6 +26,13 @@ function AdminDashboard() {
     e.preventDefault()
 
     try {
+      // Departure time cannot be in the past
+      const selectedDateTime = new Date(`${routeData.date}T${routeData.deptTime}`)
+      if (selectedDateTime < new Date()) {
+        alert("Departure cannot be in the past!")
+        return
+      }
+
       const {data} = await axios.post('routes/create',
         {
           bus: routeData.bus,
@@ -328,7 +338,6 @@ function AdminDashboard() {
             <label>Departure time:</label>
             <input 
               type="time"
-              placeholder="6:00PM"
               value={routeData.deptTime} 
               onChange={(e) => setRouteData({...routeData, deptTime: e.target.value})}
             />
@@ -338,7 +347,6 @@ function AdminDashboard() {
             <label>ETA:</label>
             <input 
               type="time"
-              placeholder="12:00PM"
               value={routeData.eta} 
               onChange={(e) => setRouteData({...routeData, eta: e.target.value})}
             />
@@ -348,17 +356,14 @@ function AdminDashboard() {
             <label>Date: </label>
             <input 
               type="date"
-              placeholder="12:00PM"
               value={routeData.date} 
+              min={today}
               onChange={(e) => setRouteData({...routeData, date: e.target.value})}
             />
           </div>
 
           <button type="submit">ADD ROUTE</button>
         </form>
-
-        <hr/>
-        <Link>SEE MAP</Link>
     </div>
   )
 }

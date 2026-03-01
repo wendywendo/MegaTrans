@@ -1,11 +1,12 @@
 import express from "express"
-import { completeRoute, createRoute, getActiveRoutes, getAllRoutes, getDriverRoutes, getRoute, getRouteLocation, startRoute, updateRoute, updateRouteLocation } from "../controllers/routeController.js"
+import { completeRoute, createRoute, getActiveRoutes, getAllRoutes, getDriverRoutes, getRoute, getRouteLocation, getUpcomingRoutes, startRoute, updateRoute, updateRouteLocation } from "../controllers/routeController.js"
 
 const router = express.Router()
 
 router.get('/', getAllRoutes)
 router.put('/update/:id', updateRoute)
 router.get('/active', getActiveRoutes)
+router.get('/upcoming', getUpcomingRoutes)
 router.post('/create', createRoute)
 
 router.get('/driver', getDriverRoutes)
