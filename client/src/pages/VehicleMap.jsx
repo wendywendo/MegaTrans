@@ -105,7 +105,7 @@ function VehicleMap({ start, end, route, mode }) {
   return (
     
     <MapContainer
-        center={[start[0], start[1]]}
+        center={[busPos[0], busPos[1]]}
         zoom={13}
         style={{ height: "100vh", width: "100%" }}
     >

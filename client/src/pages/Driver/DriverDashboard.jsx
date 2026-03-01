@@ -30,7 +30,11 @@ function DriverDashboard() {
                     <p>Date: { route.date }</p>
                     <p>Status: { route.status }</p>
 
-                    <Link to={`/passengers/${route._id}`}>MARK STUDENT LIST</Link>
+                    {
+                        route.status != "closed" && (
+                            <Link to={`/passengers/${route._id}`}>MARK STUDENT LIST</Link>
+                        )
+                    }
                 </div>
             ))
         }

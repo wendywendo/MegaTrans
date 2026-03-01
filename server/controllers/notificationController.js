@@ -1,4 +1,5 @@
 import Notification from "../models/Notification.js"
+import jwt from "jsonwebtoken"
 
 export async function getAllNotifications(req, res) {
     try {

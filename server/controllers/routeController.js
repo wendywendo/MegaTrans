@@ -1,6 +1,7 @@
 import Route from "../models/Route.js"
 import Bus from "../models/Bus.js"
 import User from "../models/User.js"
+import Notification from "../models/Notification.js"
 
 import jwt from "jsonwebtoken"
 import BookedTrip from "../models/BookedTrip.js"
@@ -209,7 +210,7 @@ export async function startRoute(req, res) {
 
         const route = await Route.findById(routeId)
         if (!route) {
-            res.json({ error: "Route does not exist" })
+            return res.json({ error: "Route does not exist" })
         }
 
         // Update route status to active
@@ -243,16 +244,12 @@ export async function startRoute(req, res) {
             else if (trip.status == "booked") {
                 const message = `Your booked trip from ${trip.route.from} -> ${trip.route.to} scheduled to depart at ${trip.route.deptTime} has still not yet been boarded! Note: You have 10mins to arrive at the bus!`;
 
-                // Send notifications to parents that students are en-route
+                // Send notifications to parents whose students have not yet boarded
                 sendNotification(trip, message)
             }
         })
 
-        
-
-
-        // Send notifications to parents whose children have not boarded
-
+        res.json({ success: true })
 
     } catch (error) {
         console.error(error);
@@ -268,7 +265,7 @@ export async function completeRoute(req, res) {
 
         const route = await Route.findById(routeId)
         if (!route) {
-            res.json({ error: "Route does not exist" })
+            return res.json({ error: "Route does not exist" })
         }
 
         // Update route status to closed
@@ -277,15 +274,29 @@ export async function completeRoute(req, res) {
 
         // Update all passengers status in the trip (if en-route) to arrived
         const trips = await BookedTrip.find({ route: route._id })
+            .populate("route")
+
+        const sendNotification = async (trip, message) => {
+            await Notification.create({
+                message,
+                to: trip.user
+            })
+        }
 
         trips.forEach(trip => {
             if (trip.status == "en-route") {
                 trip.status = "arrived"
                 trip.save()
+
+                // Send notifications to parents that students have arrived
+                const message = `Your booked trip from ${trip.route.from} -> ${trip.route.to} scheduled to arrive at ${trip.route.eta} has arrived!`;
+
+                // Send notifications to parents whose students have not yet boarded
+                sendNotification(trip, message)
             }
         })
 
-        // Send notifications to parents that students have arrived
+        res.json({ success: true })
 
     } catch (error) {
         console.error(error);

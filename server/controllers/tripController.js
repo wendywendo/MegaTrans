@@ -1,6 +1,7 @@
 import BookedTrip from "../models/BookedTrip.js"
 import Route from "../models/Route.js"
 import User from "../models/User.js"
+import Notification from "../models/Notification.js"
 
 import jwt from "jsonwebtoken"
 
@@ -92,8 +93,6 @@ export async function updateBookedTrip(req, res) {
       return res.json({ error: "Booked trip does not exist" });
     }
 
-    // ===========
-
     // Send notifications to parents that students have boarded and are en-route
     if (status == "boarded") {
         const message = `Your booked trip from ${trip.route.from} -> ${trip.route.to} scheduled to depart at ${trip.route.deptTime} has been boarded`;
@@ -103,6 +102,8 @@ export async function updateBookedTrip(req, res) {
             to: trip.user
         })
     }
+
+    // =============
 
     // Send notifications to parents that students have arrived
     if (status == "arrived") {

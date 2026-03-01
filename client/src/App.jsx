@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/Admin/AdminDashboard"
 import DriverDashboard from "./pages/Driver/DriverDashboard"
 import StudentChecklist from "./pages/Driver/StudentChecklist"
 import PageNotFound from "./pages/PageNotFound"
+import Notifications from "./pages/Notifications"
 
 // Set axios defaults
 const BASE_URL = "http://localhost:8000/"
@@ -37,6 +38,8 @@ function App() {
           <Route path="passengers">
             <Route path=":id" element={<StudentChecklist />} />
           </Route>
+
+          <Route path="notifications" element={<Notifications /> }/>
   
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />

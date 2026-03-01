@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react'
 import axios from "axios"
 
 import VehicleMap from './VehicleMap'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ParentSidebar from '../components/ParentSidebar';
+import AdminSidebar from '../components/AdminSidebar';
 
 function DriverTrackingPage() {
     const { id } = useParams()
     const { user } = useAuth()
+
+    const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
  
@@ -23,6 +26,20 @@ function DriverTrackingPage() {
     const isDriver = user?.role === "driver"
     const isParent = user?.role === "parent"
     const isAdmin = user?.role === "admin"
+
+    const markRouteAsComplete = async () => {
+        try {
+            const {data} = await axios.post('/routes/complete', {
+                routeId: id
+            })
+
+            if (data.success) {
+                navigate(`/driver`)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     // Fetch route
     useEffect(() => {
@@ -59,6 +76,15 @@ function DriverTrackingPage() {
             <br />
 
             {
+                isAdmin && (
+                    <AdminSidebar 
+                        route={route}
+                        setRoute={setRoute}
+                    />
+                )
+            }
+
+            {
                 isParent && (
                     <ParentSidebar 
                         route={route}
@@ -84,8 +110,8 @@ function DriverTrackingPage() {
 
             {
                 isDriver && (
-                    <button>
-                        MARK TRIP AS COMPLETE
+                    <button onClick={markRouteAsComplete}>
+                        MARK ROUTE AS COMPLETE
                     </button>
                 )
             }

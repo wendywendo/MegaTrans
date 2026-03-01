@@ -1,11 +1,13 @@
 import axios from "axios"
 import { useEffect, useState } from "react"
-import { useParams, Link } from "react-router-dom"
+import { useParams, Link, useNavigate } from "react-router-dom"
 
 function StudentChecklist() {
 
     const { id } = useParams()
     const [bookedTrips, setBookedTrips] = useState([])
+
+    const navigate = useNavigate()
 
     const updateBookedTrip = async (tripId, status) => {
         try {
@@ -18,6 +20,20 @@ function StudentChecklist() {
                     trip._id === tripId ? {...trip, status: data.status} : trip
                 )
             )
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    const startRoute = async () => {
+        try {
+            const { data } = await axios.post(`/routes/start`, {
+                routeId: id
+            })
+
+            if (data.success) {
+                navigate(`/map/${id}/`)
+            }
         } catch (error) {
             console.error(error)
         }
@@ -66,8 +82,7 @@ function StudentChecklist() {
             </tbody>
         </table>
 
-        <Link to={`/map/${id}/`}>START TRIP</Link> 
-        {/* Mark route as started and all passengers that have arrived as en route */}
+        <button onClick={startRoute}>START ROUTE</button>
 
     </div>
   )
