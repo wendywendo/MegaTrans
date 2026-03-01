@@ -73,10 +73,6 @@ function DriverTrackingPage() {
   return (
     <div style={{ display: "grid", gridTemplateColumns: "1fr 4fr" }}>
         <div>
-            <p>Role: { user.role }</p>
-
-            <br />
-
             {
                 isAdmin && (
                     <AdminSidebar 
@@ -144,7 +140,9 @@ function DriverTrackingPage() {
                         visualizing={visualizing}
                     />
                 ) : (
-                    <p>No route selected!</p>
+                    <p className="text-center text-gray-900 bg-white border border-gray-300 rounded-md p-4 font-medium">
+                        No route selected!
+                    </p>
                 )
             }
         </div>
