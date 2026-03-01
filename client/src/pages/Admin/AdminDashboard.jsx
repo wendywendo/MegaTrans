@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import axios from "axios"
+import { Link } from "react-router-dom"
 
 function AdminDashboard() {
 
@@ -355,6 +356,9 @@ function AdminDashboard() {
 
           <button type="submit">ADD ROUTE</button>
         </form>
+
+        <hr/>
+        <Link>SEE MAP</Link>
     </div>
   )
 }

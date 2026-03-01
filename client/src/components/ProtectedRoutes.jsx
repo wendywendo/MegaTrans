@@ -7,6 +7,10 @@ function ProtectedRoutes() {
 
     if (loading) return <p>Loading...</p>
 
+    if (!loading && !user) return (
+        <h1>Network Error</h1>
+    )
+
     return user ? <Outlet /> : <Navigate to='/login' replace />
 }
 

@@ -5,6 +5,7 @@ import cors from "cors"
 import authRoutes from './routes/authRoutes.js'
 import busRoutes from './routes/busRoutes.js'
 import routeRoutes from './routes/routeRoutes.js'
+import tripRoutes from './routes/tripRoutes.js'
 import { connectDB } from "./config/db.js"
 
 import dotenv from "dotenv"
@@ -31,6 +32,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes)
 app.use('/routes', routeRoutes)
 app.use('/buses', busRoutes)
+app.use('/trips', tripRoutes)
 
 const PORT = 8000
 

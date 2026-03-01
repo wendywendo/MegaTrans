@@ -8,6 +8,10 @@ import AuthContextProvider from "./context/AuthContext"
 import ProtectedRoutes from "./components/ProtectedRoutes"
 import DriverTrackingPage from "./pages/DriverTrackingPage"
 import AdminDashboard from "./pages/Admin/AdminDashboard"
+import DriverDashboard from "./pages/Driver/DriverDashboard"
+import StudentChecklist from "./pages/Driver/StudentChecklist"
+import ParentMap from "./pages/ParentMap"
+import PageNotFound from "./pages/PageNotFound"
 
 // Set axios defaults
 const BASE_URL = "http://localhost:8000/"
@@ -22,15 +26,24 @@ function App() {
         <Routes>
           <Route element={<ProtectedRoutes />}>
             <Route index element={<Dashboard />} />
-            <Route path="map" element={<DriverTrackingPage />} />
+            <Route path="map">
+              <Route path="parent" element={<ParentMap />} />
+              <Route path=":id" element={<DriverTrackingPage />} />
+            </Route>
           </Route>
 
-          <Route path="/admin">
-            <Route index element={<AdminDashboard />} />
+          <Route path="admin" element={<AdminDashboard />} />
+
+          <Route path="driver" element={<DriverDashboard />} />
+
+          <Route path="passengers">
+            <Route path=":id" element={<StudentChecklist />} />
           </Route>
   
           <Route path="login" element={<Login />} />
           <Route path="signup" element={<Signup />} />
+
+          <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Router>
     </AuthContextProvider>

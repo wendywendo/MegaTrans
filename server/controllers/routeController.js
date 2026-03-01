@@ -2,6 +2,8 @@ import Route from "../models/Route.js"
 import Bus from "../models/Bus.js"
 import User from "../models/User.js"
 
+import jwt from "jsonwebtoken"
+
 export async function getAllRoutes(req, res) {
     try {
         const routes = await Route.find({})
@@ -20,6 +22,21 @@ export async function getActiveRoutes(req, res) {
             .populate("bus")
             .populate("driver", "fname lname")
         res.json(routes)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({ error: "Server error" })
+    }
+}
+
+export async function getRoute(req, res) {
+    try {
+        const { id } = req.params;
+
+        const route = await Route.findById(id)
+            .populate("bus")
+            .populate("driver", "fname lname")
+
+        res.json(route)
     } catch (error) {
         console.error(error)
         res.status(500).json({ error: "Server error" })
@@ -120,3 +137,46 @@ export async function updateRoute(req, res) {
         res.status(500).json({ error: "Internal server error" });
     }
 }
+
+// GetDriverRoutes
+export async function getDriverRoutes(req, res) {
+    try {
+        const { token } = req.cookies
+        
+        if (!token) {
+            return res.json({ error: "Unauthorized" })
+        }
+
+        const decoded = jwt.verify(token, process.env.SECRET_KEY)
+
+        const routes = await Route.find({ driver: decoded.id }) 
+            .populate("bus")
+            .populate("driver", "fname lname")
+
+        res.json(routes)
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+
+// Driver updates location
+export async function updateRouteLocation (req, res) {
+  const { routeId, latitude, longitude } = req.body;
+
+  try {
+    const route = await Route.findOneAndUpdate(
+      { routeId },
+      {
+        location: { type: "Point", coordinates: [longitude, latitude] },
+      },
+      { upsert: true, new: true }
+    );
+
+    res.json({ success: true, route });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
