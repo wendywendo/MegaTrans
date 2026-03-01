@@ -17,7 +17,7 @@ const pinIcon = new L.Icon({
     iconSize: [24, 24]
 })
 
-function VehicleMap({ start, end, route, mode }) {
+function VehicleMap({ start, end, route, mode, visualizing }) {
 
     const [roadRoute, setRoadRoute] = useState([]);
     const [busPos, setBusPos] = useState(start)
@@ -40,47 +40,81 @@ function VehicleMap({ start, end, route, mode }) {
     // Driver GPS tracking
     useEffect(() => {
         if (mode !== "driver") return;
-        if (!navigator.geolocation) return alert("Geolocation not supported")
-        
 
-        let lastSent = 0
+        let cleanup;
 
-        const watchId = navigator.geolocation.watchPosition(
-            async (position) => {
-                const now = Date.now()
-                if (now - lastSent < 5000) return; // every 5s
-                lastSent = now;
+        // ============== REAL GPS ==============
+        if (!visualizing) {
+            if (!navigator.geolocation) return alert("Geolocation not supported")
+            
+            let lastSent = 0
 
-                const { latitude, longitude } = position.coords
+            const watchId = navigator.geolocation.watchPosition(
+                async (position) => {
+                    const now = Date.now()
+                    if (now - lastSent < 5000) return; // every 5s
+                    lastSent = now;
 
-                // Update backend
+                    const { latitude, longitude } = position.coords
+
+                    // Update backend
+                    try {
+                        const {data} = await axios.post(`/routes/update-location`, {
+                            routeId: route._id,
+                            latitude,
+                            longitude
+                        })
+
+                        console.log(data)
+                    } catch (error) {
+                        console.error(error)
+                    }
+
+                    // Update driver map
+                    setBusPos([latitude, longitude])
+                },
+                (err) => {
+                    console.warn("Geolocation error", err.code, err.message);
+                    if (err.code === 2) setBusPos(start); // fallback for testing
+                },
+                { 
+                    enableHighAccuracy: true,
+                    timeout: 10000, 
+                    maximumAge: 0
+                }
+            )
+
+            cleanup = () => navigator.geolocation.clearWatch(watchId);
+        } 
+
+        // ============== VISUALIZATION MODE ==========
+        else {
+            if (!roadRoute.length) return;
+
+            let index = 0;
+            const interval = setInterval(async () => {
+                index = (index + 1) % roadRoute.length;
+                const [lat, lng] = roadRoute[index];
+
+                // Update backend so parents/admins see movement
                 try {
-                    const {data} = await axios.post(`/routes/update-location`, {
+                    await axios.post('/routes/update-location', {
                         routeId: route._id,
-                        latitude,
-                        longitude
+                        latitude: lat, 
+                        longitude: lng
                     })
-
-                    console.log(data)
-                } catch (error) {
+                } catch(error) {
                     console.error(error)
                 }
 
-                // Update driver map
-                setBusPos([latitude, longitude])
-            },
-            (err) => {
-                console.warn("Geolocation error", err.code, err.message);
-                if (err.code === 2) setBusPos(start); // fallback for testing
-            },
-            { 
-                enableHighAccuracy: true,
-                timeout: 10000, maximumAge: 0
-            }
-        )
+                setBusPos([lat, lng]);
+            }, 500); // move every 0.5s
 
-        return () => navigator.geolocation.clearWatch(watchId);
-    }, [mode, route?._id, start])
+            cleanup = () => clearInterval(interval);
+        }
+
+        return cleanup;
+    }, [mode, route?._id, start, visualizing, roadRoute])
 
 
     // Viewer mode [admin & parents] 

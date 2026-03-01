@@ -18,6 +18,12 @@ function ParentSidebar({ route, setRoute }) {
     return (
         <div>
             <p>YOUR BOOKED TRIPS: </p>
+
+            {
+                bookedTrips.length == 0 && (
+                    <p>No booked trips available to track</p>
+                )
+            }
             
             {
                 bookedTrips.map((trip, ind) => (

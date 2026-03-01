@@ -26,6 +26,12 @@ function AdminSidebar({ route, setRoute }) {
             <p>ALL BUSES EN ROUTE: </p>
 
             {
+                activeRoutes.length == 0 && (
+                    <p>No active routes available</p>
+                )
+            }
+
+            {
                 activeRoutes.map((activeRoute, ind) => (
                     <div key={activeRoute._id} style={{ backgroundColor: route?._id === activeRoute?._id ? "green" : "white" }}>
                         <p>{ ind+1 }. { activeRoute.bus.name }</p>

@@ -14,6 +14,8 @@ function DriverTrackingPage() {
     const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
+
+    const [visualizing, setVisualizing] = useState(false)
  
     const coordinatesMap = {
         NA: [-1.2921, 36.8219], // Nairobi
@@ -34,7 +36,7 @@ function DriverTrackingPage() {
             })
 
             if (data.success) {
-                navigate(`/driver`)
+                navigate(`/dashboard`)
             }
         } catch (error) {
             console.error(error)
@@ -58,7 +60,7 @@ function DriverTrackingPage() {
         }
 
         fetchRoute()
-    }, [id])
+    }, [id])    
 
     if (loading) {
         return <div>Loading route...</div>
@@ -110,9 +112,22 @@ function DriverTrackingPage() {
 
             {
                 isDriver && (
-                    <button onClick={markRouteAsComplete}>
-                        MARK ROUTE AS COMPLETE
-                    </button>
+                    <>
+                        <button onClick={markRouteAsComplete}>
+                            MARK ROUTE AS COMPLETE
+                        </button>
+
+                        <br /><br />
+
+                        <label>
+                            <input 
+                                type='checkbox'
+                                checked={visualizing}
+                                onChange={() => setVisualizing(prev => !prev)}
+                            />
+                            Visualize movement (demo)
+                        </label>
+                    </>
                 )
             }
         </div>
@@ -126,6 +141,7 @@ function DriverTrackingPage() {
                         end={end}
                         route={route}
                         mode={isDriver ? "driver" : "viewer"}
+                        visualizing={visualizing}
                     />
                 ) : (
                     <p>No route selected!</p>
