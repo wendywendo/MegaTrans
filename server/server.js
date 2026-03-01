@@ -6,6 +6,8 @@ import authRoutes from './routes/authRoutes.js'
 import busRoutes from './routes/busRoutes.js'
 import routeRoutes from './routes/routeRoutes.js'
 import tripRoutes from './routes/tripRoutes.js'
+import notificationRoutes from './routes/notificationRoutes.js'
+
 import { connectDB } from "./config/db.js"
 
 import dotenv from "dotenv"
@@ -33,6 +35,7 @@ app.use('/auth', authRoutes)
 app.use('/routes', routeRoutes)
 app.use('/buses', busRoutes)
 app.use('/trips', tripRoutes)
+app.use('/notifications', notificationRoutes)
 
 const PORT = 8000
 
