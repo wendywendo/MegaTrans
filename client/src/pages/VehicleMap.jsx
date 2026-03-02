@@ -155,9 +155,20 @@ function VehicleMap({ start, end, route, mode, visualizing }) {
         {/* Driver bus marker */}
         <Marker position={busPos} icon={busIcon}>
             <Popup>
-                <p><b>Bus {route.bus?.name}</b></p>
-                <p>{ route.from } - { route.to }</p>
-                <p>Dept: { route.deptTime }   ETA: { route.eta }</p>
+                <div className="bg-black text-white rounded-xl shadow-lg flex flex-col items-center">
+                    {/* Bus Name */}
+                    <p className="font-bold text-lg text-center">BUS {route.bus?.name}</p>
+
+                    {/* Route Info */}
+                    <p className="text-gray-300 text-sm text-center">
+                        {route.from} - {route.to}
+                    </p>
+
+                    {/* DepartureTime and ETA */}
+                    <p className="text-gray-400 text-sm text-center flex gap-4">
+                        <span>Dept: {route.deptTime}</span> <span>ETA: {route.eta}</span>
+                    </p>
+                </div>
             </Popup>
         </Marker>
 

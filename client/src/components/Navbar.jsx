@@ -1,40 +1,69 @@
 import { Link } from "react-router-dom"
 import { useAuth } from "../context/AuthContext"
 
+import { FaBell, FaBus, FaHouse, FaMap, FaCircleUser } from "react-icons/fa6";
+
 function Navbar() {
 
     const { user } = useAuth()
 
     return (
-        <nav style={{ display: "flex", gap: "4px" }}>
-            <Link to='/'>Home</Link>
+        <nav className="flex bg-black p-2 justify-between items-center">
+            <Link to='/'>
+                <FaBus 
+                    size={50}
+                    className="p-2 rounded-full bg-transparent hover:bg-[#3A276D] transition-colors duration-200 text-white"
+                />
+            </Link>
 
-            {
-                user ? (
-                    <>
-                        <Link to='/dashboard'>My Dashboard</Link>
+            <div className="flex gap-8">
+                {
+                    user ? (
+                        <>
+                            <Link to='/dashboard'>
+                                <FaHouse
+                                    size={50}
+                                    className="p-2 rounded-full bg-transparent hover:bg-[#3A276D] transition-colors duration-200 text-white"
+                                />
+                            </Link>
 
-                        {
-                            user.role == "admin" && (
-                                <Link to='/map'>Map</Link>
-                            )   
-                        }
+                            {
+                                user.role == "admin" && (
+                                    <Link to='/map'>
+                                        <FaMap
+                                            size={50}
+                                            className="p-2 rounded-full bg-transparent hover:bg-[#3A276D] transition-colors duration-200 text-white"
+                                        />
+                                    </Link>
+                                )   
+                            }
 
-                        {
-                            user.role == "parent" && (
-                                <Link to='/notifications'>Notifications</Link>
-                            )
-                        }
+                            {
+                                user.role == "parent" && (
+                                    <Link to='/notifications'>
+                                        <FaBell
+                                            size={50}
+                                            className="p-2 rounded-full bg-transparent hover:bg-[#3A276D] transition-colors duration-200 text-white"
+                                        />
+                                    </Link>
+                                )
+                            }
 
-                        <Link to='profile'>Profile</Link>
-                    </>
-                ) : (
-                    <>
-                        <Link to='/login'>Login</Link>
-                        <Link to='/signup'>SignUp</Link>
-                    </>
-                )
-            }
+                            <Link to='profile'>
+                                <FaCircleUser
+                                    size={50}
+                                    className="p-2 rounded-full bg-transparent hover:bg-[#3A276D] transition-colors duration-200 text-white"
+                                />
+                            </Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link to='/login'>Login</Link>
+                            <Link to='/signup'>SignUp</Link>
+                        </>
+                    )
+                }
+            </div>
         </nav>
     )
 }
