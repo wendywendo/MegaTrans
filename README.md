@@ -1,4 +1,4 @@
-# Mega Trans (Built for Mega Hackathon 2026)
+# Mega Trans
 
 ## Problem Statement
 
