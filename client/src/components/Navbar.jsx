@@ -58,8 +58,8 @@ function Navbar() {
                         </>
                     ) : (
                         <>
-                            <Link to='/login'>Login</Link>
-                            <Link to='/signup'>SignUp</Link>
+                            <Link to='/login' className="text-white">Login</Link>
+                            <Link to='/signup' className="text-white">SignUp</Link>
                         </>
                     )
                 }
