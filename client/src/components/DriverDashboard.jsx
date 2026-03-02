@@ -48,7 +48,7 @@ function DriverDashboard() {
                         >
                             <div className="flex justify-between items-center mb-3">
                                 <h2 className="text-lg font-bold text-black">
-                                    {ind + 1}. Bus {route.bus.name}
+                                    {ind + 1}. Bus {route.bus?.name}
                                 </h2>
                                 
                                 <span
