@@ -91,41 +91,75 @@ function DriverTrackingPage() {
                 )
             }
 
-            {
-                (!loading && isDriver) && (
-                    <>
-                        <p><b>Bus {route.bus?.name}</b></p>
-                        <p>From: { route.from }</p>
-                        <p>To: { route.to }</p>
-                        <p>Dept Time: { route.deptTime }</p>
-                        <p>ETA: { route.eta }</p>
-                    </>
-                )
-            }
+            <div className='p-3'>
+                {
+                    (!loading && isDriver) && (
+                        <div className="bg-white border border-black rounded-xl p-5 shadow-sm w-full max-w-xs">
+                            <div className="mb-4 border-b border-black pb-2">
+                                <h3 className="text-lg font-bold tracking-wide">CURRENT ROUTE</h3>
+                            </div>
 
-            
-            <br />
+                            <div className="mb-4">
+                                <p className="text-sm text-gray-600">Bus</p>
+                                <p className="text-xl font-bold">
+                                {route.bus?.name}
+                                </p>
+                            </div>
 
-            {
-                isDriver && (
-                    <>
-                        <button onClick={markRouteAsComplete}>
-                            MARK ROUTE AS COMPLETE
-                        </button>
+                            <div className="mb-4">
+                                <p className="text-sm text-gray-600 mb-1">Route</p>
+                                <p className="font-semibold text-lg">
+                                {route.from} ➡️ {route.to}
+                                </p>
+                            </div>
 
-                        <br /><br />
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                <p className="text-xs text-gray-500">Departure</p>
+                                <p className="font-bold text-black">
+                                    {route.deptTime}
+                                </p>
+                                </div>
 
-                        <label>
-                            <input 
-                                type='checkbox'
-                                checked={visualizing}
-                                onChange={() => setVisualizing(prev => !prev)}
-                            />
-                            Visualize movement (demo)
-                        </label>
-                    </>
-                )
-            }
+                                <div>
+                                <p className="text-xs text-gray-500">ETA</p>
+                                <p className="font-bold text-black">
+                                    {route.eta}
+                                </p>
+                                </div>
+                            </div>
+                        </div>
+                    )
+                }
+
+                {
+                    isDriver && (
+                        <div className="mt-6 border-t border-black pt-4 space-y-4">
+                            <button 
+                                onClick={markRouteAsComplete}
+                                className="w-full rounded-xl p-1 border border-black bg-black text-white py-2 font-bold tracking-wide hover:bg-white hover:text-black transition-colors duration-200"
+                            >
+                                MARK ROUTE AS COMPLETE
+                            </button>
+
+                            <label
+                                className="flex items-center gap-3 cursor-pointer select-none"  
+                            >
+                                <input 
+                                    type='checkbox'
+                                    checked={visualizing}
+                                    onChange={() => setVisualizing(prev => !prev)}
+                                    className="w-4 h-4 accent-black"
+                                />
+
+                                <span className="text-gray-500">
+                                    Visualize movement <span className="text-gray-500">(demo)</span>
+                                </span>
+                            </label>
+                        </div>
+                    )
+                }
+            </div>
         </div>
 
 
